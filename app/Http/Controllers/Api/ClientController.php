@@ -53,7 +53,7 @@ class ClientController extends Controller
     public function show($id)
     {
         $user = Auth::user();
-        $client = Client::where('id', $id)->where('user_id', $user->id)->firstOrFail();
+        $client = Client::findOrFail($id);
         $this->authorize('view', $client);
         return new ClientResource($client);
     }
@@ -61,8 +61,7 @@ class ClientController extends Controller
     public function update(UpdateClientRequest $request, $id)
     {
         $user = Auth::user();
-        $client = Client::where('id', $id)->where('user_id', $user->id)->firstOrFail();
-        // using policy for authorization
+        $client = Client::findOrFail($id);
         $this->authorize('update', $client);
         
         return DB::transaction(function () use ($request, $client, $user) {
@@ -76,14 +75,12 @@ class ClientController extends Controller
         });
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+
     public function destroy($id)
     {
         // It is better to use softDelete but for test purpose this model does not use soft delete atm.
         $user = Auth::user();
-        $client = Client::where('id', $id)->where('user_id', $user->id)->firstOrFail();
+        $client = Client::findOrFail($id);
         $this->authorize('delete', $client);
         
         return DB::transaction(function () use ($client, $user) {
