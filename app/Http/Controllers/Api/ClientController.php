@@ -20,7 +20,7 @@ class ClientController extends Controller
 
     public function __construct(NotificationProvider $notificationProvider)
     {
-        // this user SlackService atm but we can change it to any other service if we need in future.
+        // this uses SlackService atm but we can change it to any other service if we need in future.
         $this->notificationProvider = $notificationProvider;
     }
 
@@ -28,7 +28,7 @@ class ClientController extends Controller
     {
         $user = Auth::user();
         $clients = Client::where('user_id', $user->id)->get();
-        
+
         // only return the data that is needed for the client resource
         return ClientResource::collection($clients);
     }
