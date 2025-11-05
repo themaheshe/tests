@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Client;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -13,6 +12,7 @@ use App\Mail\ClientCreated;
 use Illuminate\Support\Facades\Mail;
 use App\Services\NotificationProvider;
 use App\Http\Resources\ClientResource;
+use App\Models\UserLog;
 
 class ClientController extends Controller
 {
@@ -28,6 +28,7 @@ class ClientController extends Controller
     {
         $user = Auth::user();
         $clients = Client::where('user_id', $user->id)->get();
+        // only return the data that is needed for the client resource
         return ClientResource::collection($clients);
     }
 
@@ -38,7 +39,7 @@ class ClientController extends Controller
             $client = Client::create(array_merge($request->validated(), [
                 'user_id' => $user->id
             ]));
-            DB::table('user_logs')->insert([
+            UserLog::create([
                 'action' => 'client_created',
                 'user_id' => $user->id,
                 'date_created' => now(),
@@ -66,7 +67,7 @@ class ClientController extends Controller
         
         return DB::transaction(function () use ($request, $client, $user) {
             $client->update($request->validated());
-            DB::table('user_logs')->insert([
+            UserLog::create([
                 'action' => 'client_updated',
                 'user_id' => $user->id,
                 'date_created' => now(),
@@ -87,7 +88,7 @@ class ClientController extends Controller
         
         return DB::transaction(function () use ($client, $user) {
             $client->delete();
-            DB::table('user_logs')->insert([
+            UserLog::create([
                 'action' => 'client_deleted',
                 'user_id' => $user->id,
                 'date_created' => now(),
