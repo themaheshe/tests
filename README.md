@@ -52,20 +52,38 @@ Authorization: Bearer {token}
 ```
 **Response:**
 ```json
-[
-  {
-    "id": 1,
-    "user_id": 1,
-    "first_name": "John",
-    "last_name": "Doe",
-    "email": "john@example.com",
-    "age": 33,
-    "linkedInUrl": "https://linkedin.com/in/johndoe",
-    "created_at": "...",
-    "updated_at": "..."
-  },
-  ...
-]
+{
+  "data": [
+    {
+      "id": 1,
+      "first_name": "John",
+      "last_name": "Doe",
+      "email": "john@example.com",
+      "age": 33,
+      "linkedInUrl": "https://linkedin.com/in/johndoe"
+    },
+    ...
+  ]
+}
+```
+
+#### Show Client
+```http
+GET /api/clients/{id}
+Authorization: Bearer {token}
+```
+**Response:**
+```json
+{
+  "data": {
+    "id": 2,
+    "first_name": "Jane",
+    "last_name": "Smith",
+    "email": "jane@example.com",
+    "age": 29,
+    "linkedInUrl": "https://linkedin.com/in/janesmith"
+  }
+}
 ```
 
 #### Create New Client
@@ -85,7 +103,11 @@ Content-Type: application/json
 ```json
 {
   "id": 2,
-  ...
+  "first_name": "Jane",
+  "last_name": "Smith",
+  "email": "jane@example.com",
+  "age": 29,
+  "linkedInUrl": "https://linkedin.com/in/janesmith"
 }
 ```
 - Email + Slack notification sent!
@@ -103,8 +125,14 @@ Content-Type: application/json
 **Response:**
 ```json
 {
-  "id": 2,
-  ...
+  "data": {
+    "id": 2,
+    "first_name": "Janet",
+    "last_name": "Smith",
+    "email": "jane@example.com",
+    "age": 30,
+    "linkedInUrl": "https://linkedin.com/in/janesmith"
+  }
 }
 ```
 
