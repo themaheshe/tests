@@ -7,6 +7,9 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Client;
+use App\Models\UserLog;
+use App\Services\NotificationProvider;
+use Mockery\MockInterface;
 
 class ClientApiTest extends TestCase
 {
@@ -22,6 +25,12 @@ class ClientApiTest extends TestCase
             'age' => 29,
             'linkedInUrl' => 'https://linkedin.com/in/janesmith',
         ];
+
+        // Mock the NotificationProvider (SlackService), we don't want to call the actual API.
+        $this->mock(NotificationProvider::class, function (MockInterface $mock) {
+            $mock->expects('sendNotification')->once();
+        });
+
         $response = $this->actingAs($user)->postJson('/api/clients', $payload);
         $response->assertStatus(201);
         $this->assertDatabaseHas('clients', [
