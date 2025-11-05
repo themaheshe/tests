@@ -28,6 +28,7 @@ class ClientController extends Controller
     {
         $user = Auth::user();
         $clients = Client::where('user_id', $user->id)->get();
+        
         // only return the data that is needed for the client resource
         return ClientResource::collection($clients);
     }
@@ -35,16 +36,20 @@ class ClientController extends Controller
     public function store(StoreClientRequest $request)
     {
         $user = Auth::user();
+
         return DB::transaction(function () use ($request, $user) {
             $client = Client::create(array_merge($request->validated(), [
                 'user_id' => $user->id
             ]));
+
             UserLog::create([
                 'action' => 'client_created',
                 'user_id' => $user->id,
                 'date_created' => now(),
             ]);
+
             Mail::to($user->email)->send(new ClientCreated());
+
             $this->notificationProvider->sendNotification('A client record was created by user ' . $user->id);
             return response()->json($client, 201);
         });
