@@ -1,6 +1,6 @@
-# Digital8 Job Interview Test - Laravel API
+# Demo For Job Interview Test - Laravel API
 
-This repository contains a Laravel test project for the Digital8 job interview process. It demonstrates API development, user-level security, validation, logging, PHPunit test and integrations.
+This repository contains a Laravel test project for demo purpose. It demonstrates API development, user-level security, validation, logging, PHPunit test and integrations.
 
 ## Implemented Features
 
